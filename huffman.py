@@ -1,28 +1,28 @@
 """
 Parts:
-- Tally all the word counts
-- Turn the word counts into an array of trees to be combined
+- Tally all the char counts
+- Turn the char counts into an array of trees to be combined
 - Consolidate the trees using huffman procedure
 """
 def huffman(text):
 	"""Takes a string and returns a
 	tree corresponding to the optimal huffman encoding."""
-	def word_freqs(text):
+	def char_freqs(text):
 		"""Takes a string and returns a dictionary of frequencies."""
-		words = text.split(" ")
+		chars = list(text)
 		freqs = {}
-		for word in words:
-			if word in freqs:
-				freqs[word] += 1
+		for char in chars:
+			if char in freqs:
+				freqs[char] += 1
 			else:
-				freqs[word] = 1
+				freqs[char] = 1
 		return freqs
 
 	def make_tree_dict(freqs):
-		"""Returns a dictionary of words mapped to leaf nodes."""
+		"""Returns a dictionary of chars mapped to leaf nodes."""
 		res = {}
-		for word, freq in freqs.items():
-			res[word] = Tree(word, None)
+		for char, freq in freqs.items():
+			res[char] = Tree(char, None)
 		return res
 
 	def consolidate(freqs, trees):
@@ -37,13 +37,13 @@ def huffman(text):
 	def get_min(freqs):
 		"""Returns and removes the lowest frequency key."""
 		low = list(freqs)[0]
-		for word, freq in freqs.items():
+		for char, freq in freqs.items():
 			if freq < freqs[low]:
-				low = word
+				low = char
 		low_freq = freqs.pop(low)
 		return low, low_freq
 
-	freqs = word_freqs(text)
+	freqs = char_freqs(text)
 	trees = make_tree_dict(freqs)
 	while (len(trees) > 1):
 		#iterates while we don't have a complete huffman tree
@@ -51,8 +51,8 @@ def huffman(text):
 	return trees[list(trees)[0]]
 
 class Tree:
-	def __init__(self, word, branches):
-		self.word = word
+	def __init__(self, char, branches):
+		self.char = char
 		if branches:
 			self.left = branches[0] #0 bit
 			self.right = branches[1] #1 bit
